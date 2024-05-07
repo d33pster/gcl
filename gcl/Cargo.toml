@@ -1,0 +1,13 @@
+[package]
+name = "gcl"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+git2 = "0.18.3"
+colored = "2.1.0"
+rustypath = "0.1.1"
+
+[[bin]]
+name = "gcl"
+path = "src/main.rs"
