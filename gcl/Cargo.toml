@@ -2,6 +2,13 @@
 name = "gcl"
 version = "0.1.0"
 edition = "2021"
+authors = ["Soumyo Deep Gupta <deep.main.ac@gmail.com>"]
+keywords = ["d33pster", "gcl", "git-clone", "git-clone-alternative", "rust-git"]
+description = "Git Clone with an upgrade"
+readme = "README.md"
+license-file = "LICENSE"
+repository = "https://github.com/d33pster/gcl"
+categories = ["command-line-utilities", "filesystem"]
 
 [dependencies]
 git2 = "0.18.3"
