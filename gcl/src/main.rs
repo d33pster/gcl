@@ -22,7 +22,7 @@ fn version() {
     process::exit(0);
 }
 
-use git2::{build::{RepoBuilder}, Cred, FetchOptions, RemoteCallbacks, Repository};
+use git2::{build::RepoBuilder, Cred, FetchOptions, RemoteCallbacks, Repository};
 
 fn main() -> Result<(), git2::Error> {
     let mut args = Arguments::new(std::env::args().skip(1).collect());
