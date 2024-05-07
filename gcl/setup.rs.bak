@@ -1,0 +1,67 @@
+use std::process::Command;
+use std::env;
+use std::process;
+
+use std::fs;
+use std::io;
+
+use colored::*;
+
+use rustypath::RPath;
+
+fn main () {
+    let currentdir = RPath::pwd();
+    println!("{}", currentdir.convert_to_string());
+    // process::exit(0);
+    let gcl_dir = currentdir.clone();
+
+    // change to gcl dir
+    if let Err(e) = env::set_current_dir(&gcl_dir.convert_to_string()) {
+        eprintln!("{}: {}", "@err".red(), e);
+        process::exit(1);
+    }
+
+
+    // run cargo command.
+    let output = Command::new("cargo")
+        .args(&["build", "--release"])
+        .output()
+        .expect("SETUP failed.");
+    
+    if output.status.success() {
+        println!("{} gcl", "@built".blue());
+    } else {
+        // if let Some(err) = String::from_utf8(output.stderr) {
+        //     println!("{}: {}", "@err".red(), err);
+        // }
+    }
+
+    // copy the file from target/gcl to homedir.
+    match copyfile() {
+        Ok(()) => {},
+        Err(e) => eprintln!("{}: {}\n", "@err".red(), e),
+    }
+
+    // resolve shell
+    let output2 = Command::new("echo")
+        .args(&["$SHELL"])
+        .output()
+        .expect("Failed to fetch SHELL.");
+    
+    if output2.status.success() {
+        let stdout = String::from_utf8(output.stdout).expect("Invalid Output.");
+        println!("{}", stdout);
+
+    } else {
+        eprintln!("{}: {}", "@err".red(), "cannot resolve shell.")
+    }
+
+}
+
+fn copyfile() -> io::Result<()> {
+    let cpath = RPath::pwd().join("target").join("gcl");
+    let dpath = RPath::gethomedir().join("gcl");
+
+    fs::copy(&cpath.convert_to_string(), &dpath.convert_to_string())?;
+    Ok(())
+}
